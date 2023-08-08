@@ -1,0 +1,40 @@
+@startuml
+
+
+
+actor User
+participant Client
+participant Server
+participant Database
+
+
+== User Browse Products ==
+User -> Client : Get Products Request
+Client -> Server : GET /products with User Bearer Token
+Server -> Database : Retrieve Products
+Database --> Server : Product Data
+Server --> Client : HTTP 200 OK
+
+== User Add to Cart ==
+User -> Client : Add to Cart Request
+Client -> Server : POST /cart with User Bearer Token
+Server -> Database : Add Item to Cart
+Database --> Server : Cart Updated
+Server --> Client : HTTP 200 OK
+
+== User Checkout ==
+User -> Client : Checkout Request
+alt No Selected Cart Items 
+Client --> User : No Selected Items to Checkout
+else Selected Cart Items 
+Client -> Server : POST /checkout with User Bearer Token
+Server -> Database : Save Cart
+Database --> Server : Cart Data
+Server --> Client : HTTP 200 OK
+Client --> User : Redirect to Payment Page
+end
+
+
+
+
+@enduml

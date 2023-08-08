@@ -1,0 +1,27 @@
+@startuml
+
+
+
+actor User
+actor Admin
+participant Client
+participant Server
+
+
+== User Logout ==
+User -> Client : Logout Request
+Client -> Server : POST /logout with User Bearer Token
+Server -> Client : Invalidate User Token
+Server --> Client : HTTP 200 OK
+Client --> User : Redirect to Login Page
+
+== Admin Logout ==
+Admin -> Client : Logout Request
+Client -> Server : POST /logout with User Bearer Token
+Server -> Client : Invalidate User Token
+Server --> Client : HTTP 200 OK
+Client --> Admin : Redirect to Login Page
+
+
+
+@enduml

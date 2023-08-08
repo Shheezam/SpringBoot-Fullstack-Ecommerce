@@ -1,0 +1,60 @@
+@startuml
+
+
+
+actor Admin
+participant Client
+participant Server
+participant Database
+ 
+== Admin Add Product ==
+
+Admin -> Client : Create Product Request
+Client -> Server : POST /products with Admin Bearer Token
+alt Product Already Exist
+Server --> Database : Validate productName
+Database --> Server : 409
+Server --> Client : HTTP 409 Product already exist
+else Product Doest not Exist
+Server -> Database : Save Product
+Database --> Server : Product Saved
+Server --> Client : HTTP 201 Created
+end
+
+
+== Admin Add Product using CSV File ==
+Admin -> Client : Upload CSV file Request
+Client -> Server : POST /products with Admin Bearer Token
+alt Product Already Exist
+Server --> Database : Validate productName
+Database --> Server : 409
+Server --> Client : HTTP 409 Product already exist
+else Product Doest not Exist
+Server -> Database : Save Product
+Database --> Server : Product Saved
+Server --> Client : HTTP 201 Created
+end
+
+== Admin Update Product==
+Admin -> Client : Update Product Request
+Client -> Server : PUT /products/:id with Admin Bearer Token
+Server -> Database : Update Product
+Database --> Server : Product Updated
+Server --> Client : HTTP 200 OK
+
+== Admin Delete Product==
+Admin -> Client : Delete Product Request
+Client -> Server : DELETE /products/:id with Admin Bearer Token
+Server -> Database : Delete Product
+Database --> Server : Product Deleted
+Server --> Client : HTTP 204 No Content
+
+== Admin Display Product ==
+Admin -> Client : Read Product Request
+Client -> Server : GET /products/:id with Admin Bearer Token
+Server -> Database : Retrieve Product
+Database --> Server : Product Data
+Server --> Client : HTTP 200 OK
+
+
+@enduml

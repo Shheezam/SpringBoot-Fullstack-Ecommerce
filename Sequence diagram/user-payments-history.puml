@@ -1,0 +1,26 @@
+@startuml
+
+
+
+actor User
+participant Client
+participant Server
+participant Database
+
+
+== User Payment History ==
+User -> Client : View Product Request
+Client -> Server : GET /transactions/ with User Bearer Token
+Server -> Database : Retrieve Successful Transactions
+Database --> Server : HTTP 200 OK
+Server --> Client :  Display Transactions
+
+== User Download Payment History ==
+User -> Client : Download Payment History as PDF
+Client -> Server : GET /User/downloadPayment History with User Bearer Token
+Server -> Database : Retrieve Total Payment History Data
+Database --> Server : Total Payment History Data
+Server --> Client : HTTP 200 OK
+
+
+@enduml

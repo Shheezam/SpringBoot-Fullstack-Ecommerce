@@ -1,0 +1,19 @@
+@startuml
+
+
+actor User
+participant Client
+participant Server
+participant Database
+ 
+== User Registration ==
+
+User -> Client : Register Request
+Client -> Server : POST /register
+Server -> Database : Save Credentials
+Database --> Server : 201
+Server --> Client : HTTP 201 Created /User Token
+Client --> User : Redirect to Login Page
+
+
+@enduml

@@ -1,0 +1,54 @@
+@startuml
+
+actor Customer  
+actor Admin 
+participant UI 
+participant System
+participant Orders
+participant Menu
+participant Payments
+participant Gateway 
+
+=== Customer Login ==
+Customer -> UI : Login
+UI -> System : GET/ Authenticated userToken
+System -> UI : 200 
+
+=== Browse the Store ==
+UI -> Menu : GET/books
+Menu -> UI : 200
+
+=== Add to Cart ==
+Customer -> UI : Add to cart
+UI -> Orders : POST /order:id/book
+Orders -> Menu : GET /book:id
+Menu -> Orders : 200
+Orders -> UI : 201
+
+=== Checkout and Pay ==
+Customer -> UI : Checkout and payment
+UI -> Payments : POST /payment
+Payments -> Gateway : POST /payment
+Gateway -> Payments : 200
+Payments -> Gateway : PUT /payment:id
+Gateway -> Payments : 204
+Payments -> UI : 200
+
+=== Customer Logout ==
+Customer -> UI : Logout
+UI -> System : DELETE / userSession
+System -> UI : 200 
+
+=== Admin Add Book ==
+Admin -> UI : Add Book
+UI -> System : POST /books
+System -> Menu : 201 Book added
+Menu -> System : 200
+System -> UI : 200 Book added
+
+=== Admin Remove Book ==
+Admin -> UI : Remove Book
+UI -> System : DELETE /books/:id
+System -> UI : 200 Book removed
+
+@enduml

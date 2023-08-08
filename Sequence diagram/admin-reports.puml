@@ -1,0 +1,26 @@
+@startuml
+
+
+
+actor Admin
+participant Client
+participant Server
+participant Database
+
+
+== Admin Reports ==
+Admin -> Client : View Product Request
+Client -> Server : GET /transactions/ with Admin Bearer Token
+Server -> Database : Retrieve Successful Transactions
+Database --> Server : HTTP 200 OK
+Server --> Client :  Display Transactions
+
+== Admin Download Reports ==
+Admin -> Client : Download Reports as PDF
+Client -> Server : GET /admin/downloadReports with Admin Bearer Token
+Server -> Database : Retrieve Total Reports Data
+Database --> Server : Total Reports Data
+Server --> Client : HTTP 200 OK
+
+
+@enduml

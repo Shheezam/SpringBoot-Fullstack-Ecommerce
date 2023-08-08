@@ -1,0 +1,25 @@
+@startuml
+
+
+
+actor Admin
+participant Client
+participant Server
+participant Database
+ 
+== Admin Login ==
+
+Admin  -> Client : Login Request
+Client -> Server : POST /admin-login
+Server -> Database : Validate Admin Credentials
+alt Invalid Admin Credentials 
+Database --> Server : Invalid Credentials
+Server --> Client : HTTP 403 Forbidden
+Client --> Admin :  Invalid Credentials
+else Valid Admin Credentials
+Database --> Server : Valid Credentials
+Server --> Client : HTTP 200 OK /Admin Bearer Token
+Client -> Admin : Navigate to Admin Home
+end
+
+@enduml

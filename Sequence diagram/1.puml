@@ -1,0 +1,41 @@
+@startuml
+
+participant UI
+participant Customer 
+participant Orders 
+participant Menu 
+participant Payment 
+
+UI -> Menu : GET/ products 
+Menu -> UI : 200
+UI -> Menu : GET/product/:id 
+Menu -> UI : 200
+UI -> Orders : POST /order
+Orders -> Menu : GET /product:id
+Menu -> Orders : 200
+Orders -> UI :201
+
+=== Add Item ==
+UI -> Orders : POST / order:id/item
+Orders -> Menu : GET/ product :id
+Menu -> Orders : 200
+Orders -> UI : 201
+
+===increase quantity ===
+UI -> Orders : PUT/order:id/item:id
+Orders -> UI : 204 no content
+
+===remove quantity ===
+UI -> Orders : DELETE/order:id
+Orders -> UI : 204 no content
+
+===pay ===
+UI -> Payment : POST / payment
+Payment -> Gateway : POST / payment
+Gateway -> Payment : 200
+Payment -> Gateway : PUT /payment:id
+Gateway -> Payment : 204 no content
+
+
+
+@enduml

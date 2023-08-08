@@ -1,0 +1,24 @@
+@startuml
+
+
+
+actor User
+participant Client
+participant Server
+participant Database
+
+== User Add Credit/Debit Card ==
+User -> Client : Add Credit/Debit Card Request
+Client -> Server : POST /payment/cards with User Bearer Token
+Server -> Database : Save Credit Card
+Database --> Server : Credit Card Saved
+Server --> Client : HTTP 201 Created
+
+== User Delete Credit/Debit  Card ==
+User -> Client : Delete Credit/Debit Card Request
+Client -> Server : DELETE /payment/cards/:id with User Bearer Token
+Server -> Database : Delete Credit Card
+Database --> Server : Credit Card Deleted
+Server --> Client : HTTP 204 No Content
+
+@enduml

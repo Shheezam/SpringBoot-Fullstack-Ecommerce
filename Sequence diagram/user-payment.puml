@@ -1,0 +1,34 @@
+@startuml
+
+
+
+actor User
+participant Client
+participant Server
+participant Database
+
+
+== User Payment ==
+User -> Client : Select Credit/Debit Card
+Client -> Server : GET /credit-debitCard/:userId
+Server -> Database : Retrieve User Credit/Debit Card
+Database --> Server : Credit/Debit Card Details
+Server --> Client : 200 OK
+Client --> User : Credit/Debit Card Selected 
+User -> Client : Payment Request
+alt Insufficient Balance
+Client -> Server : GET /credit-debitCardBalance/:id
+Server -> Database : Retrieve Credit/Debit Card Balance
+Database --> Server : Credit/Debit Card Balance 
+Server --> Client : 400 
+Client --> User : Insufficient Balance
+else Sufficient Balance
+Client -> Database : POST /payment with User Bearer Token
+Database -> Server : Payment Processing
+Client -> Server : PUT /payment with User Bearer Token
+Server --> Client : HTTP 200 OK
+Client -> EmailService : Send Payment Email
+EmailService --> User : Email Confirmation
+end
+
+@enduml
